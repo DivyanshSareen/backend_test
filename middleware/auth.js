@@ -1,4 +1,3 @@
-// middleware/auth.js
 function authMiddleware(req, res, next) {
   const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
   if (!ACCESS_TOKEN) {

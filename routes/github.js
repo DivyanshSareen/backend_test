@@ -1,4 +1,3 @@
-// routes/github.js
 const express = require("express");
 const axios = require("axios");
 const router = express.Router();
@@ -6,7 +5,6 @@ const authMiddleware = require("../middleware/auth");
 
 const GITHUB_API_BASE = "https://api.github.com";
 
-// Apply auth middleware to all routes in this router
 router.use(authMiddleware);
 
 /**
@@ -16,7 +14,6 @@ router.use(authMiddleware);
 router.get("/", async (req, res) => {
   console.log("Received request for GET /github");
   try {
-    // Fetch user profile and repositories concurrently using the attached auth headers
     console.log("Fetching GitHub profile and personal repositories...");
     const [userResponse, reposResponse] = await Promise.all([
       axios.get(`${GITHUB_API_BASE}/user`, { headers: req.authHeaders }),
@@ -30,7 +27,6 @@ router.get("/", async (req, res) => {
     const userData = userResponse.data;
     const reposData = reposResponse.data;
 
-    // Construct a clean response structure
     const responseData = {
       profile: {
         login: userData.login,
@@ -82,7 +78,6 @@ router.get("/:repoName", async (req, res) => {
   const { repoName } = req.params;
   console.log(`Received request for GET /github/${repoName}`);
   try {
-    // Retrieve user data to obtain the owner (username)
     console.log("Fetching GitHub profile to get owner details...");
     const userResponse = await axios.get(`${GITHUB_API_BASE}/user`, {
       headers: req.authHeaders,
@@ -92,7 +87,6 @@ router.get("/:repoName", async (req, res) => {
       `Owner determined as ${owner}. Fetching details for repository: ${repoName}`
     );
 
-    // Fetch repository details using owner and repoName
     const repoResponse = await axios.get(
       `${GITHUB_API_BASE}/repos/${owner}/${repoName}`,
       { headers: req.authHeaders }
@@ -123,7 +117,6 @@ router.post("/:repoName/issues", async (req, res) => {
   }
 
   try {
-    // Retrieve user info to get the owner
     console.log(
       "Fetching GitHub profile to determine owner for issue creation..."
     );
@@ -135,7 +128,6 @@ router.post("/:repoName/issues", async (req, res) => {
       `Owner determined as ${owner}. Creating issue in repository: ${repoName}`
     );
 
-    // Create a new issue using the GitHub API
     const issueResponse = await axios.post(
       `${GITHUB_API_BASE}/repos/${owner}/${repoName}/issues`,
       { title, body },
@@ -143,7 +135,6 @@ router.post("/:repoName/issues", async (req, res) => {
     );
     console.log(`Issue created successfully at ${issueResponse.data.html_url}`);
 
-    // Return the URL of the created issue
     res.json({ issue_url: issueResponse.data.html_url });
   } catch (error) {
     console.error("Error creating issue:", error.message);

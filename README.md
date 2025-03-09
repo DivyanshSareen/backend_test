@@ -15,27 +15,33 @@ This project is a backend API that integrates with the GitHub API to fetch your 
 - **Issue Creation:**  
   Create an issue in any of your repositories by providing a title and body.
 
+## API URL
+
+```
+https://backend-test-kkoq.onrender.com/
+```
+
 ## API Endpoints & cURL Examples
 
 ### 1. GET /github
 
 ```
-curl --location --request GET 'http://localhost:3000/github'
+curl --location 'https://backend-test-kkoq.onrender.com/github'
 ```
 
 ### 2. GET /github/{repoName}
 
 ```
-curl --location --request GET 'http://localhost:3000/github/your-repo-name'
+curl --location 'https://backend-test-kkoq.onrender.com/github/backend_test'
 ```
 
 ### 3. POST /github/{repoName}/issues
 
 ```
-curl --location --request POST 'http://localhost:3000/github/your-repo-name/issues' \
+curl --location 'https://backend-test-kkoq.onrender.com/github/backend_test/issues' \
 --header 'Content-Type: application/json' \
---data-raw '{
-"title": "Issue Title",
-"body": "Detailed description of the issue."
+--data '{
+    "title": "Test Issue",
+    "body": "Test Body of Test Issue"
 }'
 ```
